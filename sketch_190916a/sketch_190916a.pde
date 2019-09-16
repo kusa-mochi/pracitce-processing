@@ -1,13 +1,33 @@
-int numBalls = 10; //<>//
-float gravity = 2;
-float maxSpeed = 100;
+int numBalls = 6; //<>//
+float gravity = 0.3;
+float e = 0.95;
 Ball[] balls = new Ball[numBalls];
 
 class Ball {
+  public PVector GetPosition() {
+    return _pos;
+  }
+
+  public PVector GetSpeed() {
+    return _speed;
+  }
+  
+  public void SetSpeed(PVector speed) {
+    _speed = speed;
+  }
+  
+  public float GetSize() {
+    return _size;
+  }
+  
+  public float GetWeight() {
+    return _size;
+  }
+
   public void Draw() {
     noStroke();
     fill(22, 150, 50);
-    ellipse(_pos.x, _pos.y, _size, _size);
+    ellipse(_pos.x, _pos.y, _size * 2, _size * 2);
   }
 
   public void Move(float gravity) {
@@ -64,9 +84,9 @@ void setup() {
   size(640, 480);
   for (int iBall = 0; iBall < numBalls; iBall++) {
     balls[iBall] = new Ball(
-      new PVector(random(0, 639), random(0, 479)), 
-      new PVector(random(-15, 15), random(-5, 5)), 
-      random(10, 100), 
+      new PVector(random(0, 639), random(150, 479)), 
+      new PVector(random(-4, 4), random(-2, 2)), 
+      random(20, 30), 
       new PVector(640, 480)
       );
   }
@@ -77,5 +97,36 @@ void draw() {
   for (int iBall = 0; iBall < numBalls; iBall++) {
     balls[iBall].Move(gravity);
     balls[iBall].Draw();
+    for (int jBall = 0; jBall < iBall; jBall++) {
+      Ball ballA = balls[iBall];
+      Ball ballB = balls[jBall];
+      PVector posA = ballA.GetPosition();
+      PVector posB = ballB.GetPosition();
+      PVector AtoB = new PVector(posB.x - posA.x, posB.y - posA.y);
+      float distanceAtoB = AtoB.mag();
+      if(distanceAtoB > ballA.GetSize() + ballB.GetSize()) {
+        continue;
+      }
+      
+      PVector speedA = ballA.GetSpeed();
+      PVector speedB = ballB.GetSpeed();
+      float AtoBRadianAngle = AtoB.heading();
+      speedA.rotate(-AtoBRadianAngle);
+      speedB.rotate(-AtoBRadianAngle);
+      float vA = speedA.x;
+      float vB = speedB.x;
+      float weightA = ballA.GetWeight();
+      float weightB = ballB.GetWeight();
+      float vAafter = ((weightA * vA) - (weightB * (vA - (2 * vB))))/(weightA + weightB);
+      float vBafter = ((weightA * ((2 * vA) - vB)) + (weightB * vB))/(weightA + weightB);
+      speedA.x = vAafter * e;
+      speedB.x = vBafter * e;
+      speedA.rotate(AtoBRadianAngle);
+      speedB.rotate(AtoBRadianAngle);
+      ballA.SetSpeed(speedA);
+      ballB.SetSpeed(speedB);
+    }
   }
+  
+  saveFrame("frames/####.tif");
 }
