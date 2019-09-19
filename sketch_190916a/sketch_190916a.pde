@@ -1,6 +1,6 @@
-int numBalls = 100; //<>//
+int numBalls = 20; //<>//
 float gravity = 0.4;
-float e = 0.97;
+float e = 1;
 Ball[] balls = new Ball[numBalls];
 
 class Ball {
@@ -101,7 +101,7 @@ void setup() {
     balls[iBall] = new Ball(
       new PVector(random(0, winWidth - 1), random(100, winHeight - 1)), 
       new PVector(random(-8, 8), random(-8, 8)), 
-      random(10, 40), 
+      random(40, 120), 
       new PVector(winWidth, winHeight)
       );
   }
@@ -143,10 +143,10 @@ void draw() {
       float vB = speedB.x;
       float weightA = ballA.GetWeight();
       float weightB = ballB.GetWeight();
-      float vAafter = ((weightA * vA) - (weightB * (vA - (2 * vB))))/(weightA + weightB);
-      float vBafter = ((weightA * ((2 * vA) - vB)) + (weightB * vB))/(weightA + weightB);
-      speedA.x = vAafter * e;
-      speedB.x = vBafter * e;
+      float vAafter = ((weightA * vA)+(weightB * vB)-(e * weightB * (vA - vB)))/(weightA + weightB);
+      float vBafter = ((weightA * vA)+(weightB * vB)+(e * weightA * (vA - vB)))/(weightA + weightB);
+      speedA.x = vAafter;
+      speedB.x = vBafter;
       speedA.rotate(AtoBRadianAngle);
       speedB.rotate(AtoBRadianAngle);
       ballA.SetSpeed(speedA);
