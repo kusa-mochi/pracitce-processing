@@ -1,4 +1,4 @@
-int numBalls = 1000; //<>//
+int numBalls = 500; //<>// //<>//
 float gravity = 0.3;
 float mouseG = 6000;
 float hanpatsu = 0.9;
