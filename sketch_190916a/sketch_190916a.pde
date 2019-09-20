@@ -114,7 +114,7 @@ void draw() {
   background(255, 255, 255);
   fill(0);
   textSize(24);
-  text("press mouse button anywhere.", 50, 300);
+  text("press mouse button anywhere.", 65, 300);
   for (int iBall = 0; iBall < numBalls; iBall++) {
     if (mousePressed == true) {
       PVector ballPos = balls[iBall].GetPosition();
