@@ -1,9 +1,23 @@
-int numBalls = 1000; //<>//
+import processing.sound.*; //<>//
+int numSoundFiles = 100;
+SoundFile[] soundFiles = new SoundFile[numSoundFiles];
+
+int numBalls = 500;
 float gravity = 0.3;
 float mouseG = 6000;
 float hanpatsu = 0.9;
 float ballMinSize = 2;
 float ballMaxSize = 6;
+float soundThreshold = 8;
+
+void PlaySound() {
+  for (int iSound = 0; iSound < numSoundFiles; iSound++) {
+    if (soundFiles[iSound].isPlaying() == false) {
+      soundFiles[iSound].play();
+      break;
+    }
+  }
+}
 
 class Ball {
   public PVector GetPosition() {
@@ -53,18 +67,30 @@ class Ball {
     if (_pos.x < _size) {
       _pos.x = _size;
       _speed.x = -_speed.x;
+      if(abs(_speed.x) > soundThreshold) {
+        PlaySound();
+      }
     }
     if (_pos.y < _size) {
       _pos.y = _size;
       _speed.y = -_speed.y;
+      if(abs(_speed.y) > soundThreshold) {
+        PlaySound();
+      }
     }
     if (_winSize.x - _size < _pos.x) {
       _pos.x = _winSize.x - _size;
       _speed.x = -_speed.x;
+      if(abs(_speed.x) > soundThreshold) {
+        PlaySound();
+      }
     }
     if (_winSize.y - _size < _pos.y) {
       _pos.y = _winSize.y - _size;
       _speed.y = -_speed.y;
+      if(abs(_speed.y) > soundThreshold) {
+        PlaySound();
+      }
     }
 
     this.Draw();
@@ -108,6 +134,9 @@ void setup() {
       new PVector(winWidth, winHeight)
       );
   }
+  for (int iSound = 0; iSound < numSoundFiles; iSound++) {
+    soundFiles[iSound] = new SoundFile(this, "ball-sound.mp3");
+  }
 }
 
 void draw() {
@@ -123,7 +152,7 @@ void draw() {
       PVector ballToMouse = new PVector(mouseX - ballCenterPos.x, mouseY - ballCenterPos.y);
       float rr = ballToMouse.magSq();
       float mouseF = mouseG/rr;
-      if(mouseF > 2) mouseF = 2;
+      if (mouseF > 2) mouseF = 2;
 
       PVector ballSpeed = balls[iBall].GetSpeed();
       PVector dSpeed = new PVector(ballToMouse.x, ballToMouse.y);
