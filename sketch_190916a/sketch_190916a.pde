@@ -1,7 +1,7 @@
 int numBalls = 1000; //<>//
 float gravity = 0.3;
 float mouseG = 6000;
-float e = 0.9;
+float hanpatsu = 0.9;
 float ballMinSize = 2;
 float ballMaxSize = 6;
 Ball[] balls = new Ball[numBalls];
@@ -169,8 +169,8 @@ void draw() {
       float vB = speedB.x;
       float weightA = ballA.GetWeight();
       float weightB = ballB.GetWeight();
-      float vAafter = ((weightA * vA)+(weightB * vB)-(e * weightB * (vA - vB)))/(weightA + weightB);
-      float vBafter = ((weightA * vA)+(weightB * vB)+(e * weightA * (vA - vB)))/(weightA + weightB);
+      float vAafter = ((weightA * vA)+(weightB * vB)-(hanpatsu * weightB * (vA - vB)))/(weightA + weightB);
+      float vBafter = ((weightA * vA)+(weightB * vB)+(hanpatsu * weightA * (vA - vB)))/(weightA + weightB);
       speedA.x = vAafter;
       speedB.x = vBafter;
       speedA.rotate(AtoBRadianAngle);
