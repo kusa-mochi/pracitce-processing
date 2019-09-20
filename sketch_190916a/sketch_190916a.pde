@@ -129,12 +129,6 @@ void draw() {
       PVector dSpeed = new PVector(ballToMouse.x, ballToMouse.y);
       dSpeed.setMag(mouseF);
       balls[iBall].SetSpeed(PVector.add(ballSpeed, dSpeed));
-
-      //if (iBall == 0) {
-      //  fill(0);
-      //  textSize(32);
-      //  text(mouseF, 100, 100);
-      //}
     }
     balls[iBall].Move(gravity);
     balls[iBall].Draw();
