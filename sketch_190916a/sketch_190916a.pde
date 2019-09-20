@@ -145,7 +145,7 @@ void draw() {
   background(255, 255, 255);
   fill(0);
   textSize(24);
-  text("keep pressed mouse button", 70, 285);
+  text("keep mouse button pressed", 70, 285);
   text("and move mouse.", 70, 315);
   for (int iBall = 0; iBall < numBalls; iBall++) {
     if (mousePressed == true) {
