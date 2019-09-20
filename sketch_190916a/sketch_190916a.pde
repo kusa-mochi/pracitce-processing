@@ -10,9 +10,11 @@ float ballMinSize = 2;
 float ballMaxSize = 6;
 float soundThreshold = 8;
 
-void PlaySound() {
+void PlaySound(float ballSize) {
   for (int iSound = 0; iSound < numSoundFiles; iSound++) {
     if (soundFiles[iSound].isPlaying() == false) {
+      float rate = ((3 * ballSize) + (4 * ballMinSize) - ballMaxSize) / (2 * (ballMaxSize - ballMinSize));
+      soundFiles[iSound].rate(rate);
       soundFiles[iSound].play();
       break;
     }
@@ -68,28 +70,28 @@ class Ball {
       _pos.x = _size;
       _speed.x = -_speed.x;
       if(abs(_speed.x) > soundThreshold) {
-        PlaySound();
+        PlaySound(_size);
       }
     }
     if (_pos.y < _size) {
       _pos.y = _size;
       _speed.y = -_speed.y;
       if(abs(_speed.y) > soundThreshold) {
-        PlaySound();
+        PlaySound(_size);
       }
     }
     if (_winSize.x - _size < _pos.x) {
       _pos.x = _winSize.x - _size;
       _speed.x = -_speed.x;
       if(abs(_speed.x) > soundThreshold) {
-        PlaySound();
+        PlaySound(_size);
       }
     }
     if (_winSize.y - _size < _pos.y) {
       _pos.y = _winSize.y - _size;
       _speed.y = -_speed.y;
       if(abs(_speed.y) > soundThreshold) {
-        PlaySound();
+        PlaySound(_size);
       }
     }
 
