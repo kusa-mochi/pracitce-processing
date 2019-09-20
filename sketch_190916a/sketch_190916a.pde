@@ -4,7 +4,6 @@ float mouseG = 6000;
 float hanpatsu = 0.9;
 float ballMinSize = 2;
 float ballMaxSize = 6;
-Ball[] balls = new Ball[numBalls];
 
 class Ball {
   public PVector GetPosition() {
@@ -94,6 +93,7 @@ class Ball {
     this.Draw();
   }
 }
+Ball[] balls = new Ball[numBalls];
 
 void setup() {
   float winWidth = 500;
@@ -157,9 +157,8 @@ void draw() {
       ballA.SetIsBouncing(1);
       ballB.SetIsBouncing(1);
       PVector ideaAtoB = AtoB;
-      ideaAtoB.normalize();
-      ideaAtoB.mult(ballA.GetSize() + ballB.GetSize());
-      ballB.SetPosition(PVector.add(ballA.GetPosition(), ideaAtoB.mult(1.0001)));
+      ideaAtoB.setMag((ballA.GetSize() + ballB.GetSize()) * 1.0001);
+      ballB.SetPosition(PVector.add(ballA.GetPosition(), ideaAtoB));
       PVector speedA = ballA.GetSpeed();
       PVector speedB = ballB.GetSpeed();
       float AtoBRadianAngle = AtoB.heading();
