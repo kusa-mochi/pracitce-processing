@@ -1,13 +1,16 @@
-int numBalls = 20; //<>//
-float gravity = 0.4;
-float e = 1;
+int numBalls = 1000; //<>//
+float gravity = 0.3;
+float mouseG = 6000;
+float e = 0.9;
+float ballMinSize = 2;
+float ballMaxSize = 6;
 Ball[] balls = new Ball[numBalls];
 
 class Ball {
   public PVector GetPosition() {
     return _pos;
   }
-  
+
   public void SetPosition(PVector pos) {
     _pos = pos;
   }
@@ -93,15 +96,15 @@ class Ball {
 }
 
 void setup() {
-  float winWidth = 1920;
-  float winHeight = 1080;
+  float winWidth = 500;
+  float winHeight = 600;
   background(255, 255, 255);
-  size(1920, 1080);
+  size(500, 600);
   for (int iBall = 0; iBall < numBalls; iBall++) {
     balls[iBall] = new Ball(
       new PVector(random(0, winWidth - 1), random(100, winHeight - 1)), 
       new PVector(random(-8, 8), random(-8, 8)), 
-      random(40, 120), 
+      random(ballMinSize, ballMaxSize), 
       new PVector(winWidth, winHeight)
       );
   }
@@ -109,7 +112,30 @@ void setup() {
 
 void draw() {
   background(255, 255, 255);
+  fill(0);
+  textSize(24);
+  text("press mouse button anywhere.", 50, 300);
   for (int iBall = 0; iBall < numBalls; iBall++) {
+    if (mousePressed == true) {
+      PVector ballPos = balls[iBall].GetPosition();
+      float ballSize = balls[iBall].GetSize();
+      PVector ballCenterPos = PVector.add(ballPos, new PVector(ballSize, ballSize));
+      PVector ballToMouse = new PVector(mouseX - ballCenterPos.x, mouseY - ballCenterPos.y);
+      float rr = ballToMouse.magSq();
+      float mouseF = mouseG/rr;
+      if(mouseF > 2) mouseF = 2;
+
+      PVector ballSpeed = balls[iBall].GetSpeed();
+      PVector dSpeed = new PVector(ballToMouse.x, ballToMouse.y);
+      dSpeed.setMag(mouseF);
+      balls[iBall].SetSpeed(PVector.add(ballSpeed, dSpeed));
+
+      //if (iBall == 0) {
+      //  fill(0);
+      //  textSize(32);
+      //  text(mouseF, 100, 100);
+      //}
+    }
     balls[iBall].Move(gravity);
     balls[iBall].Draw();
     for (int jBall = 0; jBall < iBall; jBall++) {
@@ -154,5 +180,5 @@ void draw() {
     }
   }
 
-  saveFrame("frames/####.tif");
+  //saveFrame("frames/####.tif");
 }
