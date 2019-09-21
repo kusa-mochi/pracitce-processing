@@ -18,14 +18,18 @@ const Mochi = {
       '#7B49C3',
       '#CA24B3',
     ],
+    enableSoundPlay: false,
   },
   methods: {
     PlaySound(ballSize) {
-      for (let iSound = 0; iSound < Mochi.settings.numSoundFiles; iSound++) {
-        const rate = ((3 * ballSize) + (4 * Mochi.settings.ballMinSize) - Mochi.settings.ballMaxSize) / (2 * (Mochi.settings.ballMaxSize - Mochi.settings.ballMinSize));
-        Mochi.objects.sounds[iSound].rate(rate);
-        Mochi.objects.sounds[iSound].play();
-        break;
+      if (Mochi.settings.enableSoundPlay === true) {
+        for (let iSound = 0; iSound < Mochi.settings.numSoundFiles; iSound++) {
+          const rate = ((3 * ballSize) + (4 * Mochi.settings.ballMinSize) - Mochi.settings.ballMaxSize) / (2 * (Mochi.settings.ballMaxSize - Mochi.settings.ballMinSize));
+          Mochi.objects.sounds[iSound].rate(rate);
+          // Mochi.objects.sounds[iSound].rate(random(0.5, 2));
+          Mochi.objects.sounds[iSound].play();
+          break;
+        }
       }
     },
   },
@@ -35,7 +39,6 @@ const Mochi = {
   },
   classes: {
     createBall(pos, speed, size, color) {
-      console.log(color);
       if (pos.x < size) {
         pos.x = size;
       }
@@ -110,16 +113,23 @@ const Mochi = {
 };
 
 function preload() {
+  Mochi.settings.enableSoundPlay = true;
   soundFormats('mp3', 'ogg');
   for (let iSound = 0; iSound < Mochi.settings.numSoundFiles; iSound++) {
-    Mochi.objects.sounds.push(loadSound('assets/ball-sound.mp3'));
+    // Mochi.objects.sounds.push(loadSound('assets/ball-sound.mp3'));
+    Mochi.objects.sounds.push(loadSound('https://slash-mochi.net/wp-content/uploads/2019/09/ball-sound.mp3'));
   }
+}
+
+function mousePressed() {
+  getAudioContext().resume();
 }
 
 function setup() {
   Mochi.settings.winSize = createVector(500, 600);
   background(255, 255, 255);
-  createCanvas(Mochi.settings.winSize.x, Mochi.settings.winSize.y);
+  const canvas = createCanvas(Mochi.settings.winSize.x, Mochi.settings.winSize.y);
+  canvas.parent("ball-pool");
 
   for (let iBall = 0; iBall < Mochi.settings.numBalls; iBall++) {
     Mochi.objects.balls.push(Mochi.classes.createBall(
